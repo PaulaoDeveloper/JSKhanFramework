@@ -1,7 +1,7 @@
 # JSKhanFramework Javascript V1  ![alt text](http://brg4pafj.apps.lair.io/assets/images/icone.ico "Logo JSKHAN")
 __________________________________________________________
 
-  1. Baixe o [Zip](https://codeload.github.com/PauloSergioRomaoJunior/JSKhan/zip/master) Do Projeto
+  1. Baixe o [Zip](https://codeload.github.com/PauloSergioRomaoJunior/JSKhanFramework/zip/master) Do Projeto
   2. Extraia o Arquivo Zip Sua Hospedagem
    * Xampp: HTDOCS
    * Wamp: WWW
