@@ -12,7 +12,7 @@ __________________________________________________________
 Sempre incluir os arquivo : **app.js**
 
 __________________________________________________________
-## Page HTML Example
+## Pagina html basica para rodar o Framework
 ```html
 <!DOCTYPE html>
 <html lang="en">
@@ -27,7 +27,7 @@ __________________________________________________________
 </html>
 ```
 __________________________________________________________
-## Page JSKhan.init.js Example
+## Funçoes Basicas Do Framework
 ```javascript
 // Iniciando O Frame
 const app = new Khan('app');
