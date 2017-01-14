@@ -22,7 +22,7 @@ __________________________________________________________
 </head>
 <body>
     <div khan-app="app"></div>
-	  <script type="text/javascript" src="app.js" assync></script>
+    <script type="text/javascript" src="app.js" assync></script>
 </body>
 </html>
 ```
@@ -52,6 +52,7 @@ app.Routes('/model', () => {
 			<input type="text" khan-model="texto" placeholder="Model e View 1 Com Inputs"/><br/>
 			<input type="text" khan-view="texto" placeholder="Model e View 1 Com Inputs"/>
 		`);
+});
 ```
 __________________________________________________________
 
