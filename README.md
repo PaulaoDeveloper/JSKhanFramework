@@ -22,7 +22,7 @@ __________________________________________________________
 </head>
 <body>
     <div khan-app="app"></div>
-    <script type="text/javascript" src="app.js" assync></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/PauloSergioRomaoJunior/JSKhanFramework/master/scripts/require.js"></script>
 </body>
 </html>
 ```
