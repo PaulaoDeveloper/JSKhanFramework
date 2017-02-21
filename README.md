@@ -28,31 +28,32 @@ __________________________________________________________
 ```
 __________________________________________________________
 ## Funçoes Basicas Do Framework
+```html
+<script type="text/javascript">
+```
 ```javascript
-// Iniciando O Frame
-const app = new Khan('app');
+require(["scripts/app.min","scripts/log"], () => {
 
-// DEFINIDO ROTA PARA INDEX SEM NENHUM PARAMETRO
-app.Routes('/index', () => {
-  // RENDERIZA HTML NA ROTA
-  app.DomRender(`<h1>Pagina index</h1>`);
-});
-
-// DEFINIDO ROTA PARA USER COM PARAMETRO id
-app.Routes('/user/:id' , (req) => {
-    console.log(req.id); // Recupera o Parametro id da Url
-    app.PageRender('views/pagina.html', (code) => {
-        app.DomRender(code); // renderiza um codigo html externo
-    }
-});
-
-// DEFININDO ROTA PARA MODEL E QUANDO O VALOR DO MODEL FOR MODIFICADO TAMBEM MODIFICA NO VIEW
-app.Routes('/model', () => {
-		app.DomRender(`
-			<input type="text" khan-model="texto" placeholder="Model e View 1 Com Inputs"/><br/>
-			<input type="text" khan-view="texto" placeholder="Model e View 1 Com Inputs"/>
-		`);
-});
+        // new Khan(' nome do khan-app ');
+        const app = new Khan('app');
+        new Log('Ola Mundo');
+        // ROUTE 1 INDEX
+        app.Routes('/index', () => {
+            app.PageRender('views/index.html', (c) => {
+                app.DomRender(c);
+            });
+        });
+        // ROUTE 2
+        app.Routes('/page/:id', ($request) => {
+            app.PageRender(`views/page-${$request.id}.html`, (code) => {
+                app.DomRender(code);
+            });
+            app.DomRender(`<h1> Pagina ${$request.id}</h1>`);
+        });
+    });
+```
+```html
+</script>
 ```
 __________________________________________________________
 
