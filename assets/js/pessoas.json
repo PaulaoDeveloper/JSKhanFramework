@@ -1,0 +1,26 @@
+{
+    "Paulo": {
+        "idade": 17,
+        "cidade": "catanduva"
+    },
+    "Joao": {
+        "idade": 20,
+        "cidade": "Santa Adelia"
+    },
+    "Pedro": {
+        "idade": 17,
+        "cidade": "Olimpia"
+    },
+    "Elise": {
+        "idade": 27,
+        "cidade": "Rio Preto"
+    },
+    "Joana": {
+        "idade": 18,
+        "cidade": "Orindiuva"
+    },
+    "Maria": {
+        "idade": 12,
+        "cidade": "Pindorama"
+    }
+}
