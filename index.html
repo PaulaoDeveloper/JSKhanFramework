@@ -1,82 +1,123 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-	<meta charset="UTF-8">
-	<title>JSKhan FrameWork</title>
-	<style type="text/css">
-		*{margin:0;padding:0;}
-		[khan-app]{
-			height: 100vh;
-			width: 100%;
-			background: #ccc;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			flex-direction: column;
-		}
-		[khan-app]>input{
-			margin-top: 20px;
-			width: 450px;
-			height: 55px;
-			border: none;
-			font-size: 17px;
-			font-family: 'Helvetica',sans-serif;
-			padding-left: 15px;
-			background: white;
-		}
-		[khan-app]>div{
-			width: 450px;
-			max-width: 449px;
-			height: 55px;
-			background: white;
-			line-height: 55px;
-			font-size: 17px;
-			font-family: 'Helvetica',sans-serif;
-			overflow-x: hidden;
-			padding-left: 15px;
-		}
-	</style>
+    <meta charset="UTF-8">
+    <title>JSKhan FrameWork</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/PauloSergioRomaoJunior/JSKhanFramework/master/assets/css/fonte.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
+    
+    <div khan-app="app"></div>
+    
+    <script type="text/javascript" src="https://cdn.rawgit.com/PauloSergioRomaoJunior/JSKhanFramework/master/scripts/require.js"></script>
+    <script type="text/javascript" assync>
+    require(["scripts/app", , "scripts/sha256"], () => {
 
-	<div khan-app="app"></div>
+    // new Khan(' nome do khan-app ');
+    const App = new Khan('app');
 
-	<script type="text/javascript" src="app.js" assync></script>
-	<script type="text/javascript" assync>
-	
-	// new Khan(' nome do khan-app ');
-	const app = new Khan('app');
+    // ROUTE 1 INDEX
+    App.Routes('/index', () => {
+        App.PageRender('views/index.html', (c) => {
+            App.DomRender(c);
+        });
+    });
+    // ROUTE 2
+    App.Routes('/page/:id', ($request) => {
+        App.PageRender(`views/page-${$request.id}.html`, (code) => {
+            App.DomRender(code);
+        });
+        App.DomRender(`<h1> Pagina ${$request.id}</h1>`);
+    });
 
-	// ROUTE 1 INDEX
+    App.Routes('/pessoa/:nome', (req_) => {
 
-	app.Routes('/index', () => {
-		app.DomRender(`
-			<input type="text" khan-model="texto" placeholder="Model e View 1 Com Inputs"/><br/>
-			<input type="text" khan-view="texto" placeholder="Model e View 1 Com Inputs"/>
-		`);
-		app.DomRender(
-			`<br/><input type="text" khan-model="texto2" placeholder="Model e View 2 Com Inputs"/><br/>
-			<input type="text" khan-view="texto2" placeholder="Model e View 2 Com Inputs"/>
-		`);
-		app.DomRender(
-			`<br/><input type="text" khan-model="texto3" placeholder="Model e View 3 Com Input e Div"/><br/>
-			 <div khan-view="texto3">Model e View 3 Com Input e Div</div><br/>
-		`);
-		app.PageRender('views/index.html', (c) => {
-			app.DomRender(c);
-		});
-	});
+        const pessoas = {};
+        const Container = App.Containers({
+            "channel": "Nome",
+            "funcao": function(users) {
+                console.log(users);
+            }
+        });
 
-	// ROUTE 2
+        const module = {
+            Log(str){
+                return App.requireModule('assets/js/log').log(str);
+            },
+            Calculadora(n1, simb, n2){
+                return App.requireModule('assets/js/foo').calculadora(n1, simb, n2);
+            },
+            Encripty(str){
+                return App.requireModule('assets/js/encripty').encripty(str);
+            },
+            Foo(nome, idade){
+                return App.requireModule('assets/js/foo').foo(nome, idade);
+            }
+        };
 
-	app.Routes('/page/:id', ($request) => {
-		app.PageRender(`views/page-${$request.id}.html`, (code) => {
-			app.DomRender(code);
-		});
-		app.DomRender(`<h1> Pagina ${$request.id}</h1>`);
-	});
+        module.Foo('Paulao', 15);
+        module.Log(module.Calculadora(15, "+", 50));
+        module.Log(module.Encripty('Ola mundo'));
+        //var p = new Function(reqm.foo);
+        //var m = p();
+        //m();
+        
+        req_.nome = "assets|img|anon.jpg";
+        req_.nome = req_.nome.replace(/\|/g, '/');
+        App.DomRender(`<img khan-img-src="${req_.nome}" style="height:100vh;width:100%"/>`);
 
-	</script>
-	
+        App.fetchJSON({
+            "url": "./assets/js/pessoas.json",
+            "method": "get",
+        }).then((res) => {
+            pessoas["data"] = JSON.parse(res);
+            Container.setRunService({
+                "channel": Container.GetCanal(),
+                "scope": App.Works['Jskhan'],
+                "data": [pessoas["data"]]
+            });
+        });
+
+        var conta = function(n1, simb, n2) {
+            switch (simb) {
+                case "+":
+                    return n1 + n2;
+                    break;
+                case "-":
+                    return n1 - n2;
+                    break;
+                case "*":
+                    return n1 * n2;
+                    break;
+                case "/":
+                    return n1 / n2;
+                    break;
+                default:
+                    return n1 + n2;
+            }
+        }.Memorize();
+
+        //console.log(conta(10, "-", 2));
+
+
+        /*
+        const pessoasCrypt = {};
+        Object.keys(pessoas).map((value, index) => {
+            pessoasCrypt[value] = {};
+            Object.keys(pessoas[value]).map((v, i) => {
+                console.log(pessoas[value][v]);
+                App.Encrypt(pessoas[value][v]).then((va) => {
+                    pessoasCrypt[value][v] = va;
+                });
+            });
+        });
+
+        new Log(pessoasCrypt);*/
+    });
+});
+    </script>
+
 </body>
+
 </html>
