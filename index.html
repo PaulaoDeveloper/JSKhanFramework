@@ -4,7 +4,27 @@
     <meta charset="UTF-8">
     <title>JSKhan FrameWork</title>
     <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/PauloSergioRomaoJunior/JSKhanFramework/master/assets/css/fonte.css">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/bootstrap.css">
+    <style>
+        .yell{
+            background: transparent;
+            /*background: rgba(241, 195, 9, 0.84) !important;
+        */}
+        [khan-txt-animate]>p{
+            font-size: 30px !important;
+        }
+        [khan-txt-animate]>p.khan-txt-animate-mark{
+            margin-left: 15px !important;
+            font-weight: bold;
+            color: #2c3e50;
+            animation: 1s mark;
+            animation-iteration-count: infinite;
+        }
+        @keyframes mark{
+            0%{color: transparent;transition: .5s all}
+            100%{color: rgba(0, 0, 0, 0.79);transition: .5s all}
+        }   
+    </style>
 </head>
 <body>
     
