@@ -25,7 +25,8 @@ class Khan {
         });
         funnsBody = Object.values(fun).map((v) => {
             var indx = v.indexOf('{') + 1;
-            v = v.substr(indx, v.length).replace('}', '');
+            v = v.substr(indx, v.length);
+            v = v.substr(0, v.length);
             return v;
         });
         var params = Object.values(fun).map((v) => {
