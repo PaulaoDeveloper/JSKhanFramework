@@ -5,7 +5,14 @@
 class Khan {
 
     /* CONTRUTOR E JA SETA AS FUNCOES DE VERIFICACAO */
-    constructor($app) {
+    constructor($app, status = false) {
+        window["limparCacheModulos"] = function(m){
+            m.map((v) => {
+                 sessionStorage.removeItem(v);
+                 console.log('Limpado Cache do Modulo '+ v);
+            });
+        };
+        this.routeStatus = status;
         this.Addons();
         this.ImgLoaded();
         this.app = $app;
@@ -26,8 +33,8 @@ class Khan {
         funnsBody = Object.values(fun).map((v) => {
             var indx = v.indexOf('{') + 1;
             v = v.substr(indx, v.length);
-            v = v.substr(0, v.length);
-            console.log(v);
+            v = v.substr(0, v.length - 1);
+            v = v.replace(/  /g, '').replace(/\n/g, '');
             return v;
         });
         var params = Object.values(fun).map((v) => {
@@ -247,7 +254,7 @@ class Khan {
     /* FUNCAO PARA PEGAR URL */
     uriHome() {
 
-        if (location.hash.length == 0) {
+        if (location.hash.length == 0 && this.routeStatus == true) {
             location.href = '#/index';
         }
 
