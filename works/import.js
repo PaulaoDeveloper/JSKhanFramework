@@ -1,7 +1,8 @@
-var Require = function(module){
+var Require = function(m){
 
-	var path = location.href.split('work');
-	self.importScripts(path[0] + module+'.js');
-	return exports;
+	const base_url = location.origin;
+	m = base_url + '/' + m + '.js'.toString();
+	importScripts(m);
+	//return module.exports;
 
 };
