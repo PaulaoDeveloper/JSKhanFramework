@@ -1,4 +1,4 @@
-# JSKhanFramework Javascript V1  ![alt text](http://brg4pafj.apps.lair.io/assets/images/icone.ico "Logo JSKHAN")
+# JSKhanFramework Javascript V1  ![alt text](https://s-media-cache-ak0.pinimg.com/236x/f0/5b/91/f05b9167a3c744c96012d273b5807ab7.jpg "Logo JSKHAN")
 __________________________________________________________
 
   1. Baixe o [Zip](https://codeload.github.com/PauloSergioRomaoJunior/JSKhanFramework/zip/master) Do Projeto
@@ -9,7 +9,14 @@ __________________________________________________________
   
 __________________________________________________________
 
-Sempre incluir os arquivo : **app.js**
+Sempre incluir os arquivo : **app.js ou app.min.js**
+
+__________________________________________________________
+## CDNS
+```html
+    <script type="text/javascript" src="https://cdn.rawgit.com/PauloSergioRomaoJunior/JSKhanFramework/master/scripts/app.min.js?version=1.0.1"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/PauloSergioRomaoJunior/JSKhanFramework/master/lib/Routes/route.js?version=1.0.1"></script>
+```
 
 __________________________________________________________
 ## Pagina html basica para rodar o Framework
@@ -22,7 +29,8 @@ __________________________________________________________
 </head>
 <body>
     <div khan-app="app"></div>
-    <script type="text/javascript" src="https://cdn.rawgit.com/PauloSergioRomaoJunior/JSKhanFramework/master/scripts/require.js"></script>
+    <script type="text/javascript" src="JSKhan/scripts/app.min.js?version=1.0.1"></script>
+    <script type="text/javascript" src="JSKhan/lib/Routes/route.js?version=1.0.1"></script>
 </body>
 </html>
 ```
@@ -32,11 +40,9 @@ __________________________________________________________
 <script type="text/javascript">
 ```
 ```javascript
-require(["scripts/app.min","scripts/log"], () => {
 
         // new Khan(' nome do khan-app ');
         const app = new Khan('app');
-        new Log('Ola Mundo');
         // ROUTE 1 INDEX
         app.Routes('/index', () => {
             app.PageRender('views/index.html', (c) => {
@@ -50,7 +56,7 @@ require(["scripts/app.min","scripts/log"], () => {
             });
             app.DomRender(`<h1> Pagina ${$request.id}</h1>`);
         });
-    });
+
 ```
 ```html
 </script>
