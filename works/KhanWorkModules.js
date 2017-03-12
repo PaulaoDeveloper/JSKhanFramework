@@ -10,24 +10,19 @@ self.onmessage = function(e){
     	}
 	};
 
-	exports = {};
 	self.importScripts('import.js');
 	Require(e.data);
-	var index = Object.keys(exports).map((v) => {
-		return ""+v.toString()+"";
+	var assets = {};
+	assets["data"] = {};
+	Object.keys(module.exports).map((v, i) => {
+		var ob = module.exports;
+		if(typeof ob[v] == 'function'){
+			assets["data"][v] = {data: ob[v].toString(),type: typeof ob[v]};
+		}else{
+			assets["data"][v] = {data: ob[v],type: typeof ob[v]};
+		}
 	});
-	var valor = Object.values(exports).map((v) => {
-		return v.toString();
-	});
-	const assets = {};
-	index.forEach((v, i) => {
-		assets[v] = valor[i];
-	});
-	/*
-	var dtd = stringToUint(JSON.stringify());
-	console.log(JSON.parse(uintToString(dtd)));
-	var d = Math.random() * 1000;
-	setCookie(d, dtd, 30);*/
+	assets = JSON.stringify(assets["data"]);
 	self.postMessage(assets);
 
 };
