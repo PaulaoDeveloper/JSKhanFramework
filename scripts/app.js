@@ -2,17 +2,60 @@
 /* SISTEMA FEITO POR PAULAO */
 /* SISTEMA KHAN */
 
+// - SISTEMA DE MODULOS
+
+(function(global) {
+    global["BASE_URL"] = location.origin;
+    global["module"] = {};
+    module["exports"] = {};
+    global["clearCacheModules"] = () => {
+        let cached = JSON.parse(sessionStorage.getItem('modulesCache'));
+        cached.map((v) => {
+            console.log('Removendo cache do modulo ', v);
+            sessionStorage.removeItem(v);
+        });
+        sessionStorage.removeItem('modulesCache');
+        setTimeout(function() {
+            document.location.reload();
+        }, 3000);
+    };
+
+    global["Post"] = function(url, data, callback = function() {}) {
+        var http = new XMLHttpRequest();
+        var serialize = function(obj) {
+            var str = [];
+            for (var p in obj)
+                if (obj.hasOwnProperty(p)) {
+                    str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                }
+            return str.join("&");
+        }
+        http.open("POST", url, true);
+        http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        http.onreadystatechange = function() { //Call a function when the state changes.
+            if (http.readyState == 4 && http.status == 200) {
+                callback(http.responseText);
+            }
+        }
+        http.send(serialize(data));
+    };
+
+})(window);
+
+/* CLASS KHAN INIT */
+
 class Khan {
 
     /* CONTRUTOR E JA SETA AS FUNCOES DE VERIFICACAO */
     constructor($app, status = false) {
-        window["limparCacheModulos"] = function(m){
+        window["limparCacheModulos"] = function(m) {
             m.map((v) => {
-                 sessionStorage.removeItem(v);
-                 console.log('Limpado Cache do Modulo '+ v);
+                sessionStorage.removeItem(v);
+                console.log('Limpado Cache do Modulo ' + v);
             });
         };
-        this.routeStatus = status;
+        window["SocketsKhan"] = {};
+        this.routeStatus = false;
         this.Addons();
         this.ImgLoaded();
         this.app = $app;
@@ -23,57 +66,88 @@ class Khan {
         this.Works = {};
         window.exports = {};
         window.modulesCached = {};
+        this.Routess = {};
     }
 
-    converteFunction(fun){
-        var funncs, funnsName, funnsBody, parray = [], retorno = {};
-        funnsName = Object.keys(fun).map((v) => {
-            return v;
-        });
-        funnsBody = Object.values(fun).map((v) => {
-            var indx = v.indexOf('{') + 1;
-            v = v.substr(indx, v.length);
-            v = v.substr(0, v.length - 1);
-            v = v.replace(/  /g, '').replace(/\n/g, '');
-            return v;
-        });
-        var params = Object.values(fun).map((v) => {
-        var x = v.split('('),
-            v = x[1].split(')');
-            parray.push(v[0].split(','));
-            funncs = v[1].split('{');
-        });
-        params = parray.map((v) => {
-            return v.map((v) => {
-              return v.replace(' ','');
-            })
-        });
-        funnsName = funnsName.map((v, i) => {
-            retorno[v] = new Function(...params[i], funnsBody[i]);
-        });
-        return retorno;
-    }
-
-    requireModule(module){
-        var cache = (sessionStorage.getItem(module) == null) ? false : true;
-        this.Work({
-            name: 'Modules',
-            url: 'works/KhanWorkModules.js'
-        },function(Work){
-            Work.postMessage(module);
-            Work.onmessage = function(e){
-                    var dtt = JSON.stringify(e.data);
-                    if(cache){
-                        sessionStorage.removeItem(module);
-                        sessionStorage.setItem(module, dtt);
-                    }else{
-                        sessionStorage.setItem(module, dtt);
-                        location.reload();
+    /* SOCKETS KHAN */
+    Socket(nome) {
+        var padrao = function(listener) {
+            this.change = listener;
+        };
+        SocketsKhan[nome] = {
+            createAs: new Date(),
+            cache: '',
+            cacheData: '',
+            change: function(val) {},
+            on: function(listener) {
+                this.change = listener;
+            },
+            data: function(code) {
+                if (SocketsKhan[nome].cache == '') {
+                    SocketsKhan[nome].cache = code;
+                    SocketsKhan[nome].cacheData = code;
+                    SocketsKhan[nome].change(SocketsKhan[nome].cacheData);
+                } else {
+                    if (SocketsKhan[nome].cache != code) {
+                        SocketsKhan[nome].cache = code;
+                        SocketsKhan[nome].cacheData = code;
+                        SocketsKhan[nome].change(SocketsKhan[nome].cacheData);
                     }
-            };
-        });
-        cache = this.converteFunction(JSON.parse(sessionStorage.getItem(module))); 
-        return cache; 
+                }
+            }
+        };
+        if ('on' in SocketsKhan[nome]) {
+
+            this.SocketUpdate(nome);
+
+        }
+        return {
+            emit: async function(name, data, func = function() {}) {
+                func.bind({ msg: "Socket Enviado" });
+                Post('JSKhan/lib/Sockets/emit.php', { name: name, data: JSON.stringify(data) }, func);
+            },
+            on: async function(name, callback) {
+                SocketsKhan[name]["on"](callback);
+                //console.log(SocketsKhan[name]);
+                return "Socket Receive Stream";
+            },
+            rm: function(name, d, callback = function() {}) {
+                Post('JSKhan/lib/Sockets/rm.php', { name: name, data: d }, callback);
+            }
+        };
+
+    }
+
+    SocketUpdate(name) {
+        var stemp = SocketsKhan[name]["data"];
+        setInterval(function() {
+            Post('JSKhan/lib/Sockets/on.php', { name: name }, function(d) {
+                var dt = JSON.parse(d);
+                var dataas = new Array();
+                dt.map((v) => {
+                    dataas.push(JSON.parse(v));
+                });
+                stemp(JSON.stringify(dataas));
+            });
+        }, 1500);
+    }
+
+    /* ROUTE SISTEM LIB EXTERN */
+    Router(n, c) {
+        this.Routess[n] = c;
+        var router = Router(this.Routess);
+        router.init();
+    }
+
+
+    /* IMAGES LOADS */
+
+    otimizeLoadImages() {
+        var s = document.createElement('script').src = "//spdrjs-13d1.kxcdn.com/speeder.js",
+            c = document.createElement('script').innerHTML = "speeder('ac3d92c2','ea6');";
+        if (document.querySelectorAll('head')[0].appendChild(s)) {
+            document.querySelectorAll('head')[0].appendChild(c);
+        }
     }
 
     /* CARREGA AS IMAGENS ASSINCRONAMENTE */
@@ -106,6 +180,40 @@ class Khan {
         }, 0.2);
     }
 
+    /* MODULES LOADER */
+    require(module) {
+        var cache = (sessionStorage.getItem(module) == null) ? false : true;
+        if (!cache) {
+            this.Work({
+                name: 'Modules',
+                url: 'JSKhan/works/KhanWorkModules.js'
+            }, function(Work) {
+                Work.postMessage(module);
+                Work.onmessage = function(e) {
+                    sessionStorage.setItem(module, e.data);
+                    if (sessionStorage.getItem("modulesCache") == null) {
+                        sessionStorage.setItem("modulesCache", JSON.stringify(new Array(module)));
+                    } else {
+                        var g = JSON.parse(sessionStorage.getItem("modulesCache"));
+                        g.push(module);
+                        sessionStorage.setItem("modulesCache", JSON.stringify(g));
+                    }
+                    document.location.reload();
+                };
+            });
+        } else {
+            var dtt = JSON.parse(sessionStorage.getItem(module), true);
+            Object.keys(dtt).map((v) => {
+                if (dtt[v]["type"] == "function") {
+                    dtt[v] = eval('(' + dtt[v].data + ')');
+                } else {
+                    dtt[v] = dtt[v].data;
+                }
+            });
+            return dtt;
+        }
+    }
+
     /* GERADOR DE WORKS MACHINE */
     Work(ob, callback) {
         this.Works[ob.name] = new Worker(ob.url);
@@ -128,7 +236,7 @@ class Khan {
                 });
             });
         return {
-            setContainer: function(data){
+            setContainer: function(data) {
                 data["Work"].postMessage({
                     name: data.channel,
                     fu: data.funcao.toString(),
@@ -170,15 +278,22 @@ class Khan {
     /* FUNCOES EXTRAS Each e Memorize de Cache */
 
     Addons() {
-        window["CacheModules"] = function(module){
-            sessionStorage.removeItem(module);
-            document.location.reload();
-        },
-        Object.prototype.Each = function(cb) {
-            const Keys = Object.keys(this),
-                Values = Object.values(this);
-            cb(Values, Keys);
+        window["$"] = (ob) => {
+            if (ob != 'document') {
+                return document.querySelector(ob);
+            } else {
+                return ob;
+            }
         };
+        window["CacheModules"] = function(module) {
+                sessionStorage.removeItem(module);
+                document.location.reload();
+            },
+            Object.prototype.Each = function(cb) {
+                const Keys = Object.keys(this),
+                    Values = Object.values(this);
+                cb(Values, Keys);
+            };
         Function.prototype.Memorize = function() {
             const scope = this;
             let cache = new Object(),
@@ -188,6 +303,194 @@ class Khan {
                 return cache[key] || (cache[key] = scope.call(null, ...args));
             }
         };
+        Array.prototype.max = function() {
+            return Math.max.apply(null, this);
+            // retorna maximo array
+        };
+        Array.prototype.min = function() {
+            return Math.min.apply(null, this);
+            // retorna minimo array
+        };
+
+        Object.prototype.toggle = function(f = function() {}, ftrue = []) {
+            var ob = this;
+            f.bind(ob);
+            if (ob.getAttribute('display') == 'block') {
+                ob.style.display = '';
+                ob.setAttribute('display', 'hidden');
+                if (ftrue[1]) {
+                    f();
+                }
+            } else {
+                ob.style.display = 'block';
+                ob.setAttribute('display', 'block');
+                if (ftrue[0]) {
+                    f();
+                }
+            }
+        }
+        Object.prototype.addClass = function(c) {
+            var ob = this;
+            var i = ob.className.split(' ').length;
+            if (i > 1) {
+                ob.className += ` ${c}`;
+            } else {
+                ob.className = c;
+            }
+        };
+        Object.prototype.removeClass = function(c) {
+            var ob = this;
+            var i = ob.className.split(' ').length;
+            if (i > 1) {
+                ob.className = ob.className.replace(` ${c}`, '');
+            } else {
+                ob.className = ob.className.replace(c, '');
+            }
+        };
+        Array.prototype.inArray = function(val) {
+            let objt = this;
+            var r = objt.filter((v) => {
+                return v == val;
+            });
+
+            return (r.length >= 1) ? true : false;
+
+        };
+        Object.prototype.addId = function(id) {
+            let ob = this;
+            ob.id = id;
+        };
+        Object.prototype.removeId = function(id) {
+            let ob = this;
+            ob.removeAttribute('id');
+        };
+        Object.prototype.css = function(obj) {
+            var ob = this;
+            var keys = Object.keys(obj);
+            var values = Object.values(obj);
+            keys = keys.map((va) => {
+                if (va.indexOf('-') != -1) {
+                    var r = va.split('-');
+                    var m = [];
+                    r.map((v, i) => {
+                        if (i != 0) {
+                            m[i] = v.substr(0, 1).toUpperCase() + v.substr(1, v.length);
+                        } else {
+                            m[i] = v;
+                        }
+                    });
+                    var retorno = '';
+                    m.map((v) => {
+                        retorno += v;
+                    });
+                    return retorno;
+                } else {
+                    return va;
+                }
+            });
+            keys.map((v, i) => {
+                ob.style[v] = values[i];
+            });
+        };
+        Object.prototype.Click = function(fun = "function(){}") {
+            var objt = this;
+            fun.bind(objt);
+            if (fun.toString() != "function(){}") {
+                objt.addEventListener('click', fun);
+            } else {
+                objt.click();
+            }
+        };
+        Object.prototype.Change = function(fun) {
+            var objt = this;
+            fun.bind(objt);
+            objt.addEventListener('change', fun);
+        };
+        Object.prototype.Leave = function(fun) {
+            var objt = this;
+            fun.bind(objt);
+            objt.addEventListener('mouseleave', fun);
+        };
+        Object.prototype.Center = function(fun) {
+            var objt = this;
+            fun.bind(objt);
+            objt.addEventListener('mousecenter', fun);
+        };
+        Object.prototype.Html = function(code = '') {
+            var ob = this;
+            if (code != '') {
+                ob.innerHTML = code;
+            } else {
+                return ob.innerHTML;
+            }
+        }
+        Object.prototype.Load = function(fun) {
+            document.addEventListener('DOMContentLoaded', fun);
+        };
+        Object.prototype.Hide = function(a = false) {
+            var self = this;
+            if (a) {
+                self.addClass('animated swing');
+                setTimeout(function() {
+                    self.style.display = 'none';
+                }, 1500);
+            } else {
+                self.style.display = 'none';
+            }
+        };
+        Object.prototype.Show = function(a = false) {
+            var self = this;
+            if (a) {
+                self.addClass('animated swing');
+                setTimeout(function() {
+                    self.style.display = '';
+                }, 1500);
+            } else {
+                self.style.display = '';
+            }
+        };
+        Object.prototype.Keypress = function(f) {
+            var self = this;
+            f.bind(self.srcElement);
+            if (self == 'document') {
+                document.addEventListener('keypress', f);
+            } else {
+                self.addEventListener('keypress', f);
+            }
+        };
+        Object.prototype.Append = function(c) {
+            var self = this;
+            self.innerHTML += c;
+        };
+        Object.prototype.Val = function(c = '') {
+            var self = this;
+            if (c != '') {
+                self.value = c;
+            } else {
+                return self.value;
+            }
+        };
+        Object.prototype.Attr = function(g = '', p = '') {
+            var self = this;
+            if (g != '' && p == '') {
+                return self.getAttribute(g);
+            } else if (g != '' && p != '') {
+                self.setAttribute(g, p);
+            }
+        };
+        Object.prototype.Text = function() {
+            var self = this;
+            var text = self.innerText || self.textContent;
+            return text;
+        };
+        window["strip"] = function(html) {
+            html = html.replace(/(<([^>]+)>)/ig, "");
+            html = html.replace(/[\\"'><]/g, '');
+            var tmp = document.createElement("DIV");
+            tmp.innerHTML = html;
+            return tmp.textContent || tmp.innerText || "";
+        };
+
     }
 
     /* CRIPTOGRAFADOR DE STRINGS */
@@ -318,6 +621,7 @@ class Khan {
         var $dataKeys = Object.keys($d),
             $dataValues = Object.values($d),
             $dataPostArr = '';
+        $request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         $dataKeys.forEach((val, index) => {
             if ((index + 1) < $dataKeys.length) {
                 $dataPostArr += val + '=' + $dataValues[index] + '&';
@@ -392,9 +696,9 @@ class Khan {
     /* RENDERIZA O HTML COM JS */
 
     DomRender($code) {
-        return (document.querySelectorAll(`[khan-app='${this.app}']`).length > 0) ? document.querySelector(`[khan-app='${this.app}']`).innerHTML += $code : this.Log('Erro ! Não Existe a View "' + this.app + '"');
-    }
-    /* FAZ O CACHE DO CODIGO RENDERIZADO*/
+            return (document.querySelectorAll(`[khan-app='${this.app}']`).length > 0) ? document.querySelector(`[khan-app='${this.app}']`).innerHTML += $code : this.Log('Erro ! Não Existe a View "' + this.app + '"');
+        }
+        /* FAZ O CACHE DO CODIGO RENDERIZADO*/
     CachePage(_page, call) {
 
         if (sessionStorage.getItem(_page)) {
