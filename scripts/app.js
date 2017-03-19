@@ -5,31 +5,41 @@
 // - SISTEMA DE MODULOS
 
 (function(global) {
+
     global["BASE_URL"] = location.origin;
-    global["module"] = {};
-    module["exports"] = {};
-    global["clearCacheModules"] = () => {
-        let cached = JSON.parse(sessionStorage.getItem('modulesCache'));
-        cached.map((v) => {
-            console.log('Removendo cache do modulo ', v);
-            sessionStorage.removeItem(v);
-        });
-        sessionStorage.removeItem('modulesCache');
-        setTimeout(function() {
-            document.location.reload();
-        }, 3000);
+    global["Type"] = function(object) {
+
+        var stringConstructor = "test".constructor;
+        var arrayConstructor = [].constructor;
+        var objectConstructor = {}.constructor;
+
+        if (object === null) {
+            return "null";
+        } else if (object === undefined) {
+            return "undefined";
+        } else if (object.constructor === stringConstructor) {
+            return "String";
+        } else if (object.constructor === arrayConstructor) {
+            return "Array";
+        } else if (object.constructor === objectConstructor) {
+            return "Object";
+        } else {
+            return "don't know";
+        }
+
+    };
+
+    global["serialize"] = function(obj) {
+        var str = [];
+        for (var p in obj)
+            if (obj.hasOwnProperty(p)) {
+                str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+            }
+        return str.join("&");
     };
 
     global["Post"] = function(url, data, callback = function() {}) {
         var http = new XMLHttpRequest();
-        var serialize = function(obj) {
-            var str = [];
-            for (var p in obj)
-                if (obj.hasOwnProperty(p)) {
-                    str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-                }
-            return str.join("&");
-        }
         http.open("POST", url, true);
         http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         http.onreadystatechange = function() { //Call a function when the state changes.
@@ -40,20 +50,52 @@
         http.send(serialize(data));
     };
 
+    global["GetPage"] = function(url, call = function() {}) {
+
+        var oReq = new XMLHttpRequest();
+        oReq.open("GET", url, true);
+        oReq.onreadystatechange = function() { //Call a function when the state changes.
+            if (oReq.readyState == 4 && oReq.status == 200) {
+                call(oReq.responseText);
+            }
+        };
+        oReq.send();
+
+    };
+
+
 })(window);
+
+/* CURRENT CONTROLLER*/
+class Controller {
+
+    get CurrentController(){
+
+        var url = location.origin + location.pathname;
+        if(location.href == url){
+
+            url = url.replace(url, '').split('/');
+
+        }else{
+
+            url = location.href.replace(url+'#/', '');
+            url = url.split('/');
+
+        }
+
+        return url[0]+'Controller';
+
+    }
+
+}
 
 /* CLASS KHAN INIT */
 
 class Khan {
 
     /* CONTRUTOR E JA SETA AS FUNCOES DE VERIFICACAO */
-    constructor($app, status = false) {
-        window["limparCacheModulos"] = function(m) {
-            m.map((v) => {
-                sessionStorage.removeItem(v);
-                console.log('Limpado Cache do Modulo ' + v);
-            });
-        };
+    constructor($app) {
+        var self = this;
         window["SocketsKhan"] = {};
         this.routeStatus = false;
         this.Addons();
@@ -64,10 +106,93 @@ class Khan {
         this.ifModelBind();
         this.ifTextAnimate();
         this.Works = {};
-        window.exports = {};
-        window.modulesCached = {};
         this.Routess = {};
     }
+
+    // Create Component
+    Components(){
+
+        return {
+            New( n, data){
+                var proto = Object.create(HTMLElement.prototype);
+                proto.name = n;
+                proto = Object.assign({}, proto, data);
+                document.registerElement(n, {
+                    prototype: proto
+                });
+            },
+            Create(n){
+                return document.createElement(n);
+            }
+        }
+
+    }
+
+    // Controllers
+    Controllers(name, call){
+
+        name = name.replace('Controller', '');
+ 
+        var scope = {
+            Controller: name + "Controller",
+            CreateAs: new Date(),
+            View: {}
+        };
+
+        this.Router("/" + name, call(scope));
+
+    }
+
+    // Configura os Modulos
+    ConfigModules(ob) {
+
+        this.configurationModules = ob;
+
+    }
+
+    // CARREGADOR DE MODULOS
+    Modules(m, f) {
+
+        const head = document.querySelectorAll('head')[0];
+        const size = {
+            "change": f,
+            "valueCache": m.length,
+            "valueChange": 0,
+            set val(v) {
+                this.valueChange = v;
+                if (this.valueChange == this.valueCache) {
+                    this.change();
+                }
+            }
+        };
+
+        m.forEach((v, i) => {
+
+            var map = this.configurationModules["map"];
+            if (v in map) {
+                v = map[v] + ".js";
+            }else{
+                v = v + ".js";
+            }
+            if('baseUrl' in this.configurationModules){
+                var baseUrlM = this.configurationModules['baseUrl'];
+                v = this.configurationModules['baseUrl'] + v;
+            }else{
+                var baseUrlM = '';
+            }
+            var node = document.createElement('script');
+            node.type = 'text/javascript';
+            node.charset = 'utf-8';
+            node.async = true;
+            node.src = v;
+            node.setAttribute("khan-modules-name", v.replace(baseUrlM, '').replace('.js','').toLowerCase());
+            node.onload = function() {
+                size.val = i + 1;
+            };
+            head.appendChild(node);
+
+        });
+   }
 
     /* SOCKETS KHAN */
     Socket(nome) {
@@ -103,8 +228,13 @@ class Khan {
         }
         return {
             emit: async function(name, data, func = function() {}) {
-                func.bind({ msg: "Socket Enviado" });
-                Post('JSKhan/lib/Sockets/emit.php', { name: name, data: JSON.stringify(data) }, func);
+                func.bind({
+                    msg: "Socket Enviado"
+                });
+                Post('JSKhan/lib/Sockets/pooling_emit.php', {
+                    name: name,
+                    data: JSON.stringify(data)
+                }, func);
             },
             on: async function(name, callback) {
                 SocketsKhan[name]["on"](callback);
@@ -112,7 +242,10 @@ class Khan {
                 return "Socket Receive Stream";
             },
             rm: function(name, d, callback = function() {}) {
-                Post('JSKhan/lib/Sockets/rm.php', { name: name, data: d }, callback);
+                Post('JSKhan/lib/Sockets/pooling_rm.php', {
+                    name: name,
+                    data: d
+                }, callback);
             }
         };
 
@@ -121,15 +254,21 @@ class Khan {
     SocketUpdate(name) {
         var stemp = SocketsKhan[name]["data"];
         setInterval(function() {
-            Post('JSKhan/lib/Sockets/on.php', { name: name }, function(d) {
+            GetPage('JSKhan/lib/Sockets/pooling_on.php?name=' + name, function(d) {
                 var dt = JSON.parse(d);
-                var dataas = new Array();
-                dt.map((v) => {
-                    dataas.push(JSON.parse(v));
-                });
-                stemp(JSON.stringify(dataas));
+                var vrf = 'msg' in dt;
+                if (vrf == false) {
+
+                    var dataas = new Array();
+                    dt.map((v) => {
+                        dataas.push(JSON.parse(v));
+                    });
+                    stemp(JSON.stringify(dataas));
+
+                }
+
             });
-        }, 1500);
+        }, 2000);
     }
 
     /* ROUTE SISTEM LIB EXTERN */
@@ -559,6 +698,7 @@ class Khan {
 
         if (location.hash.length == 0 && this.routeStatus == true) {
             location.href = '#/index';
+            location.reload();
         }
 
     }
@@ -638,61 +778,6 @@ class Khan {
         $request.send($dataPostArr);
     }
 
-    /* SISTEM ROUTES */
-
-    Routes($name = 'index', $callback = function() {}) {
-        $name = $name.toString().split('/');
-        if (this.GetUri().All()[0] == $name[1] && this.GetUri().All().length > 0) {
-            $callback(this.getParameters(this.postParameters($name), $name));
-        } else if (location.hash == "#/") {
-            location.href = location.hash + 'index';
-        }
-    }
-
-    GetUri() {
-        return {
-            All: () => {
-                var r = (location.hash.length > 0) ? location.hash.split('/') : ['#', 'index'];
-                delete r[0];
-                return r.filter((val) => {
-                    return val != 'undefined';
-                });
-            },
-            Filter: ($string) => {
-                $string = $string.replace(/(<([^>]+)>)/ig, "");
-                $string = $string.replace(/<\/?[^>]+(>|$)/g, "");
-                return $string;
-            }
-        }
-    }
-
-    getParameters($url, $uris) {
-        this.Params = new Object();
-        var arr = Object.values($url),
-            ures = [];
-        $uris.forEach((val) => {
-            ures.push(val);
-        });
-        arr.forEach((val) => {
-            this.Params[ures[val].replace(':', '')] = (isNaN(this.GetUri().All()[val])) ? this.GetUri().Filter(this.GetUri().All()[val]) : parseInt(this.GetUri().All()[val]);
-        });
-        return this.Params;
-    }
-
-    postParameters($url) {
-        delete $url[0];
-        $url = $url.filter((val) => {
-            return val != 'undefined';
-        });
-        var achados = [];
-        $url.forEach((val, index) => {
-            if (val.indexOf(':') != -1) {
-                achados.push(index);
-            }
-        });
-        return achados;
-    }
-
     /* RENDERIZA O HTML COM JS */
 
     DomRender($code) {
@@ -715,17 +800,17 @@ class Khan {
     }
 
     PageRender($page, $callback = () => {}) {
-        //if(this.CachePage($page, $callback)){
+        if(this.CachePage($page, $callback)){
         var $request = new XMLHttpRequest();
         $request.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                //sessionStorage.setItem($page, window.btoa(this.responseText));
+                sessionStorage.setItem($page, window.btoa(this.responseText));
                 $callback(this.responseText);
             }
         };
         $request.open("GET", $page, true);
         $request.send();
-        //}
+        }
     }
 
     /* FUNCOES DE DEBUG */
