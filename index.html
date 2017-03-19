@@ -6,138 +6,104 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/PauloSergioRomaoJunior/JSKhanFramework/master/assets/css/fonte.css">
     <link rel="stylesheet" href="assets/css/bootstrap.css">
     <style>
-        .yell{
+        .yell {
             background: transparent;
             /*background: rgba(241, 195, 9, 0.84) !important;
-        */}
-        [khan-txt-animate]>p{
+        */
+        }
+        
+        [khan-txt-animate]>p {
             font-size: 30px !important;
         }
-        [khan-txt-animate]>p.khan-txt-animate-mark{
+        
+        [khan-txt-animate]>p.khan-txt-animate-mark {
             margin-left: 15px !important;
             font-weight: bold;
             color: #2c3e50;
             animation: 1s mark;
             animation-iteration-count: infinite;
         }
-        @keyframes mark{
-            0%{color: transparent;transition: .5s all}
-            100%{color: rgba(0, 0, 0, 0.79);transition: .5s all}
-        }   
+        
+        @keyframes mark {
+            0% {
+                color: transparent;
+                transition: .5s all
+            }
+            100% {
+                color: rgba(0, 0, 0, 0.79);
+                transition: .5s all
+            }
+        }
     </style>
 </head>
 <body>
-    
-    <div khan-app="app"></div>
-    
-    <script type="text/javascript" src="https://cdn.rawgit.com/PauloSergioRomaoJunior/JSKhanFramework/master/scripts/require.js"></script>
-    <script type="text/javascript" assync>
-    require(["scripts/app","scripts/sha256"], () => {
 
-    // new Khan(' nome do khan-app ');
-    const App = new Khan('app', /*route ative? */ true);
+    <template-khan></template-khan>
 
-    // ROUTE 1 INDEX
-    App.Routes('/index', () => {
-        App.PageRender('views/index.html', (c) => {
-            App.DomRender(c);
-        });
-    });
-    // ROUTE 2
-    App.Routes('/page/:id', ($request) => {
-        App.PageRender(`views/page-${$request.id}.html`, (code) => {
-            App.DomRender(code);
-        });
-        App.DomRender(`<h1> Pagina ${$request.id}</h1>`);
-    });
-
-    App.Routes('/pessoa/:nome', (req_) => {
-
-        const pessoas = {};
-        const Container = App.Containers({
-            "channel": "Nome",
-            "funcao": function(users) {
-                console.log(users);
-            }
-        });
-
-        const module = {
-            Log(str){
-                return App.requireModule('assets/js/log').log(str);
-            },
-            Calculadora(n1, simb, n2){
-                return App.requireModule('assets/js/foo').calculadora(n1, simb, n2);
-            },
-            Encripty(str){
-                return App.requireModule('assets/js/encripty').encripty(str);
-            },
-            Foo(nome, idade){
-                return App.requireModule('assets/js/foo').foo(nome, idade);
-            }
-        };
-
-        module.Foo('Paulao', 15);
-        module.Log(module.Calculadora(15, "+", 50));
-        module.Log(module.Encripty('Ola mundo'));
-        //var p = new Function(reqm.foo);
-        //var m = p();
-        //m();
+    <script type="text/javascript" src="https://cdn.rawgit.com/PauloSergioRomaoJunior/JSKhanFramework/master/lib/Routes/route.js?version=1.0.2"></script>
+    <script type="text/javascript" charset="utf-8" src="scripts/app.min.js?version=1.0.2"></script>
+    <script type="text/javascript" charset="utf-8" async>
         
-        req_.nome = "assets|img|anon.jpg";
-        req_.nome = req_.nome.replace(/\|/g, '/');
-        App.DomRender(`<img khan-img-src="${req_.nome}" style="height:100vh;width:100%"/>`);
+        // new Khan(' nome do khan-app ');
+        
+        const App = new Khan('MeuApp'),
+              Template = document.querySelector('template-khan');
 
-        App.fetchJSON({
-            "url": "./assets/js/pessoas.json",
-            "method": "get",
-        }).then((res) => {
-            pessoas["data"] = JSON.parse(res);
-            Container.setRunService({
-                "channel": Container.GetCanal(),
-                "scope": App.Works['Jskhan'],
-                "data": [pessoas["data"]]
-            });
-        });
-
-        var conta = function(n1, simb, n2) {
-            switch (simb) {
-                case "+":
-                    return n1 + n2;
-                    break;
-                case "-":
-                    return n1 - n2;
-                    break;
-                case "*":
-                    return n1 * n2;
-                    break;
-                case "/":
-                    return n1 / n2;
-                    break;
-                default:
-                    return n1 + n2;
+        App.ConfigModules({
+            "baseUrl": "lib/",
+            "map": {
+                "Log": "Modules/log",
+                "Calculadora": "Modules/foo",
+                "Foo": "Modules/foo",
+                "Components": "Modules/Components"
             }
-        }.Memorize();
-
-        //console.log(conta(10, "-", 2));
-
-
-        /*
-        const pessoasCrypt = {};
-        Object.keys(pessoas).map((value, index) => {
-            pessoasCrypt[value] = {};
-            Object.keys(pessoas[value]).map((v, i) => {
-                console.log(pessoas[value][v]);
-                App.Encrypt(pessoas[value][v]).then((va) => {
-                    pessoasCrypt[value][v] = va;
-                });
-            });
         });
 
-        new Log(pessoasCrypt);*/
-    });
-});
+        App.Modules(["Components"], function() {
+
+                // ROUTE 1 INDEX
+                App.Controllers('indexController', function($scope){
+
+                    App.Components().New('img-khan', {
+
+                            contructor(){
+                                console.log("Construtor do Component Img Khan");
+                            },
+                            dateCreate: new Date(),
+                            createdCallback(){
+                                console.log("IMG KHAN CRIADO !!");
+                            },
+                            get createAs(){
+                                return this.dateCreate;
+                            } 
+
+                    });
+
+                    console.log($scope);
+                    console.log(App.Components().Create('img-khan'));
+
+                    $scope.View["data"] = {
+
+                           HelloWorld: "Ola Mundo !!",
+                           Msg: "Chamado Pela viewController",
+                           Msg_Boas_Vindas: "Olá Seja bem Vindoooo"
+
+                    };
+
+                    //Template.Render($scope.View["data"]);
+                    Template.PageRender("views/index.html", $scope.View["data"]);
+
+                });
+
+                // ROUTE 2
+                App.Router('/page/:id', ($request) => {
+                    App.PageRender(`views/page-${$request.id}.html`, (code) => {
+                        App.DomRender(code);
+                    });
+                    App.DomRender(`<h1> Pagina ${$request.id}</h1>`);
+                });
+
+        });
     </script>
-
 </body>
-
 </html>
