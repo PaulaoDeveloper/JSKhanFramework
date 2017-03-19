@@ -97,10 +97,8 @@
 
                 // ROUTE 2
                 App.Router('/page/:id', ($request) => {
-                    App.PageRender(`views/page-${$request.id}.html`, (code) => {
-                        App.DomRender(code);
-                    });
-                    App.DomRender(`<h1> Pagina ${$request.id}</h1>`);
+                    Template.PageRender(`views/page-${$request.id}.html`, {});
+                    Template.Code = `<h1> Pagina ${$request.id}</h1>`;
                 });
 
         });
