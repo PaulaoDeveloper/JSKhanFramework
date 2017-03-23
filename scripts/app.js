@@ -4,10 +4,10 @@
 
 // - SISTEMA DE MODULOS
 
-(function(global) {
+(function() {
 
-    global["BASE_URL"] = location.origin;
-    global["Type"] = function(object) {
+    this.BASE_URL = location.origin;
+    this.Type = function(object) {
 
         var stringConstructor = "test".constructor;
         var arrayConstructor = [].constructor;
@@ -29,7 +29,7 @@
 
     };
 
-    global["serialize"] = function(obj) {
+    this.serialize = function(obj) {
         var str = [];
         for (var p in obj)
             if (obj.hasOwnProperty(p)) {
@@ -38,7 +38,7 @@
         return str.join("&");
     };
 
-    global["Post"] = function(url, data, callback = function() {}) {
+    this.Post = function(url, data, callback = function() {}) {
         var http = new XMLHttpRequest();
         http.open("POST", url, true);
         http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -50,7 +50,7 @@
         http.send(serialize(data));
     };
 
-    global["GetPage"] = function(url, call = function() {}) {
+    this.GetPage = function(url, call = function() {}) {
 
         var oReq = new XMLHttpRequest();
         oReq.open("GET", url, true);
@@ -64,10 +64,31 @@
     };
 
 
-})(window);
+}).apply(window);
 
 /* CURRENT CONTROLLER*/
 class Controller {
+
+	Render(model){
+
+		var ContainTemplate = document.querySelector('template-khan'),
+			Props = Object.keys(model);
+
+		Props.forEach((v) => {
+			if(ContainTemplate.Code.indexOf(v) != -1 && typeof model[v] == 'string'){
+
+			var replaced = new RegExp("{{"+v+"}}","g");
+			ContainTemplate.Code = ContainTemplate.Code.replace(replaced, model[v]);
+
+			}
+			else if(ContainTemplate.Code.indexOf(v) != -1 && typeof model[v] == 'function'){
+					window[v] = model[v];
+					var replaced = new RegExp("{{"+v+"}}","g");
+					ContainTemplate.Code = ContainTemplate.Code.replace(replaced, v+'()');
+					console.log(replaced);
+			}
+		});
+	}
 
     get CurrentController(){
 
@@ -114,12 +135,20 @@ class Khan {
 
         return {
             New( n, data){
-                var proto = Object.create(HTMLElement.prototype);
-                proto.name = n;
-                proto = Object.assign({}, proto, data);
-                document.registerElement(n, {
-                    prototype: proto
+                class nComponent extends HTMLElement {
+                		constructor(){
+                			//super();
+                			this.init();
+                		}
+                }
+                Object.getOwnPropertyNames(data).map((v) => {
+                	nComponent.prototype[v] = data[v];
                 });
+                nComponent.prototype.createdCallback = function(){
+                	this.init();
+                };
+                //console.log(new nComponent());
+                document.registerElement(n, nComponent);
             },
             Create(n){
                 return document.createElement(n);
@@ -139,7 +168,13 @@ class Khan {
             View: {}
         };
 
-        this.Router("/" + name, call(scope));
+        var NewController = class extends Controller { 
+        	constructor(){ 
+        		super(); 
+        		this.init();
+        	}
+        };
+        this.Router("/" + name, call(NewController));
 
     }
 
@@ -781,7 +816,7 @@ class Khan {
     /* RENDERIZA O HTML COM JS */
 
     DomRender($code) {
-            return (document.querySelectorAll(`[khan-app='${this.app}']`).length > 0) ? document.querySelector(`[khan-app='${this.app}']`).innerHTML += $code : this.Log('Erro ! Não Existe a View "' + this.app + '"');
+            return (document.querySelectorAll(`template-khan`).length > 0) ? document.querySelector(`template-khan`).Code += $code : this.Log('Erro ! Não Existe a View "' + this.app + '"');
         }
         /* FAZ O CACHE DO CODIGO RENDERIZADO*/
     CachePage(_page, call) {
