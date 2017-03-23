@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>JSKhan FrameWork</title>
+    <link rel="icon" href="assets/img/icon.png" />
     <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/PauloSergioRomaoJunior/JSKhanFramework/master/assets/css/fonte.css">
     <link rel="stylesheet" href="assets/css/bootstrap.css">
     <style>
@@ -38,10 +39,12 @@
 </head>
 <body>
 
-    <template-khan></template-khan>
+    <template-khan>
+        <h1 onclick="{{helloWorldMsg}}">{{Msg_Boas_Vindas}}</h1>
+    </template-khan>
 
-    <script type="text/javascript" src="https://cdn.rawgit.com/PauloSergioRomaoJunior/JSKhanFramework/master/lib/Routes/route.js?version=1.0.2"></script>
-    <script type="text/javascript" charset="utf-8" src="scripts/app.min.js?version=1.0.2"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/PauloSergioRomaoJunior/JSKhanFramework/master/lib/Routes/route.js?version=1.0.1"></script>
+    <script type="text/javascript" charset="utf-8" src="scripts/app.js"></script>
     <script type="text/javascript" charset="utf-8" async>
         
         // new Khan(' nome do khan-app ');
@@ -62,17 +65,15 @@
         App.Modules(["Components"], function() {
 
                 // ROUTE 1 INDEX
-                App.Controllers('indexController', function($scope){
+                App.Controllers('homeController', function($scope){
 
+                    /*
                     App.Components().New('img-khan', {
 
-                            contructor(){
+                            init(){
                                 console.log("Construtor do Component Img Khan");
                             },
                             dateCreate: new Date(),
-                            createdCallback(){
-                                console.log("IMG KHAN CRIADO !!");
-                            },
                             get createAs(){
                                 return this.dateCreate;
                             } 
@@ -81,27 +82,36 @@
 
                     console.log($scope);
                     console.log(App.Components().Create('img-khan'));
+                    */
 
-                    $scope.View["data"] = {
+                    const Model = {
 
-                           HelloWorld: "Ola Mundo !!",
-                           Msg: "Chamado Pela viewController",
-                           Msg_Boas_Vindas: "Olá Seja bem Vindoooo"
+                        HelloWorld: "Ola Mundo !!",
+                        Msg: "Chamado Pela viewController",
+                        Msg_Boas_Vindas: "Olá Seja bem Vindoooo",
+                        helloWorldMsg(){
+                           return  alert("Ola Mundo !! :)");
+                        }
 
                     };
 
-                    //Template.Render($scope.View["data"]);
-                    Template.PageRender("views/index.html", $scope.View["data"]);
+                    const Controlador = $scope;
+                    Controlador.prototype.init = function(){
+                        console.log("Construtor !!");
+                    };
+
+                    const Conn = new Controlador();
+                    Conn.Render(Model);
 
                 });
 
                 // ROUTE 2
                 App.Router('/page/:id', ($request) => {
-                    Template.PageRender(`views/page-${$request.id}.html`, {});
-                    Template.Code = `<h1> Pagina ${$request.id}</h1>`;
+                    App.DomRender(`<h1> Pagina ${$request}</h1>`);
                 });
 
         });
     </script>
+    <!-- <script type="text/javascript" charset="utf-8" src="lib/Cache/cache.js"></script> -->
 </body>
 </html>
