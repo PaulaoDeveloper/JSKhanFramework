@@ -1,0 +1,504 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"over",
+				"overflow-x"
+			],
+			[
+				"ove",
+				"overflow-y"
+			],
+			[
+				"event",
+				"eventPatterns"
+			],
+			[
+				"json",
+				"json_encode"
+			],
+			[
+				"for",
+				"foreach\tforeach …"
+			],
+			[
+				"forea",
+				"foreach\tforeach …"
+			],
+			[
+				"arra",
+				"array_push"
+			],
+			[
+				"jso",
+				"json_encode"
+			],
+			[
+				"strpo",
+				"strpos_array"
+			],
+			[
+				"json_",
+				"json_encode〔function〕"
+			],
+			[
+				"set_",
+				"set_time_limit〔function〕"
+			],
+			[
+				"functi",
+				"function〔keyword〕"
+			],
+			[
+				"me",
+				"method"
+			],
+			[
+				"outp",
+				"output"
+			],
+			[
+				"sc",
+				"script"
+			],
+			[
+				"css",
+				"css/"
+			],
+			[
+				"scri",
+				"script\tTag"
+			],
+			[
+				"fore",
+				"foreach"
+			],
+			[
+				"spa",
+				"space-around"
+			],
+			[
+				"wi",
+				"width"
+			],
+			[
+				"w",
+				"width"
+			],
+			[
+				"slid",
+				"slideshow"
+			],
+			[
+				"box-s",
+				"box-sizing"
+			],
+			[
+				"ali",
+				"align-items"
+			],
+			[
+				"ba",
+				"background"
+			],
+			[
+				"clas",
+				"className"
+			],
+			[
+				"ch",
+				"childs"
+			],
+			[
+				"back",
+				"background-repeat"
+			],
+			[
+				"add",
+				"addcslashes"
+			],
+			[
+				"str_r",
+				"str_replace"
+			],
+			[
+				"data",
+				"database"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 185.0,
+		"last_filter": "Minify",
+		"selected_items":
+		[
+			[
+				"Minify",
+				"Minify::Minify File"
+			],
+			[
+				"mini",
+				"Minify::Minify File"
+			],
+			[
+				"Ma",
+				"Material Theme: Configuration"
+			],
+			[
+				"Install",
+				"Package Control: Install Package"
+			],
+			[
+				"Brows",
+				"Preferences: Browse Packages"
+			],
+			[
+				"Install ",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Rem",
+				"Package Control: Remove Package"
+			],
+			[
+				"Mat",
+				"Material Theme: Configuration"
+			],
+			[
+				"LiveReload",
+				"LiveReload: Enable/disable plug-ins"
+			],
+			[
+				"LiveReload: ",
+				"LiveReload: Self test"
+			],
+			[
+				"Sidebar",
+				"Side Bar: Refresh"
+			],
+			[
+				"SublimeS",
+				"SublimeServer: Start SublimeServer"
+			],
+			[
+				"Mate",
+				"Material Theme: Configuration"
+			],
+			[
+				"Git: Add",
+				"Git: Add..."
+			],
+			[
+				"Remove P",
+				"Package Control: Remove Package"
+			],
+			[
+				"Git: ",
+				"Git: Remote"
+			],
+			[
+				"Git: Sta",
+				"Git: Status"
+			],
+			[
+				"Git: I",
+				"Git: Init"
+			],
+			[
+				"Git: Ini",
+				"Git: Init"
+			],
+			[
+				"SublimeGIT",
+				"Set Syntax: SublimeGit Status"
+			],
+			[
+				"Pack",
+				"Package Control: Install Package"
+			],
+			[
+				"SublimeServer",
+				"SublimeServer: Manage SublimeServer Settings"
+			],
+			[
+				"Package Control: In",
+				"Package Control: Install Package"
+			],
+			[
+				"Packag",
+				"Package Control: Install Package"
+			],
+			[
+				"Sublime",
+				"SublimeServer: Start SublimeServer"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: R",
+				"Package Control: Remove Package"
+			],
+			[
+				"Package Control: I",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: in",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 510.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = 'df21e130d211cfc94d9b0905775a7c0f' + '1e3d39e33b79698005270310898eea76'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+	],
+	"file_history":
+	[
+		"/C/xampp/htdocs/sockets/index.html",
+		"/C/xampp/htdocs/sockets/data/global.json",
+		"/C/xampp/htdocs/sockets/lib/server.php",
+		"/C/xampp/htdocs/sockets/lib/cloud.min.js",
+		"/C/xampp/htdocs/sockets/lib/cloud.js",
+		"/C/xampp/htdocs/sockets/teste.php",
+		"/C/xampp/htdocs/sockets/lib/jsondb.php",
+		"/C/xampp/htdocs/sockets/server.php",
+		"/C/xampp/htdocs/sockets/jsondb.php",
+		"/C/xampp/htdocs/sockets/data/ola.json",
+		"/C/Users/usuario 2017/AppData/Roaming/Sublime Text 3/Packages/User/Default (Windows).sublime-keymap",
+		"/C/xampp/htdocs/sockets/.sublime/SideBarEnhancements.json",
+		"/C/Users/usuario 2017/AppData/Roaming/Sublime Text 3/Packages/User/Side Bar.sublime-settings",
+		"/C/Users/usuario 2017/AppData/Roaming/Sublime Text 3/Packages/SideBarEnhancements/Side Bar.sublime-settings",
+		"/C/Users/usuario 2017/AppData/Roaming/Sublime Text 3/Packages/SideBarEnhancements/Default (Windows).sublime-keymap",
+		"/C/xampp/htdocs/sockets/socks.sublime-project",
+		"/C/xampp/htdocs/sockets/vendor/igorw/event-source/examples/redis/client.html",
+		"/C/Users/usuario 2017/AppData/Roaming/Sublime Text 3/Packages/User/Localhost.sublime-build",
+		"/C/xampp/htdocs/sockets/data/myjson.json",
+		"/C/Users/usuario 2017/Desktop/testes/sockets/jsonp.php",
+		"/C/Users/usuario 2017/Desktop/testes/sockets/composer.json",
+		"/C/Users/usuario 2017/Desktop/testes/sockets/index.html",
+		"/C/Users/usuario 2017/AppData/Roaming/Sublime Text 3/Packages/User/SideBarEnhancements/Open With/Side Bar.sublime-menu",
+		"/C/Users/usuario 2017/Desktop/Imobiliaria/css/960.min.css",
+		"/C/Users/usuario 2017/Desktop/Imobiliaria/js/uisearch.js",
+		"/C/Users/usuario 2017/AppData/Roaming/Sublime Text 3/Packages/User/Git.sublime-settings",
+		"/C/Users/usuario 2017/AppData/Roaming/Sublime Text 3/Packages/Git/Git.sublime-settings",
+		"/C/Users/usuario 2017/AppData/Roaming/Sublime Text 3/Packages/SublimeGit/SublimeGit.sublime-settings",
+		"/C/Users/usuario 2017/Desktop/Imobiliaria/index.php",
+		"/C/Users/usuario 2017/Desktop/testes/editor.html",
+		"/C/Users/usuario 2017/AppData/Roaming/Sublime Text 3/Packages/User/SublimeServer.sublime-settings",
+		"/C/Users/usuario 2017/Desktop/Imobiliaria/js/markers.js",
+		"/C/Users/usuario 2017/Desktop/Imobiliaria/js/classie.js",
+		"/C/Users/usuario 2017/Desktop/Imobiliaria/js/scripts.js",
+		"/C/Users/usuario 2017/Desktop/Imobiliaria/js/jquery.easydropdown.js",
+		"/C/Users/usuario 2017/Desktop/Imobiliaria/css/nav.css",
+		"/C/Users/usuario 2017/Desktop/Imobiliaria/css/etalage.css",
+		"/C/Users/usuario 2017/Desktop/Imobiliaria/css/bootstrap.css",
+		"/C/Users/usuario 2017/Desktop/Imobiliaria/.htaccess",
+		"/C/Users/usuario 2017/Desktop/Imobiliaria/js/padrao.js",
+		"/C/Users/usuario 2017/Desktop/Imobiliaria/pages/produto.php",
+		"/C/Users/usuario 2017/Desktop/Imobiliaria/pages/inicio.php",
+		"/C/Users/usuario 2017/Desktop/Imobiliaria/pages/adm_add.php",
+		"/C/Users/usuario 2017/Desktop/Imobiliaria/css/stilo.css",
+		"/C/Users/usuario 2017/Desktop/Imobiliaria/pages/contato.php",
+		"/C/Users/usuario 2017/Desktop/Imobiliaria/pages/adm_edit.php",
+		"/C/Users/usuario 2017/Desktop/Imobiliaria/pages/pw.php",
+		"/C/Users/usuario 2017/Desktop/Imobiliaria/css/style.css",
+		"/C/Users/usuario 2017/Desktop/Imobiliaria/configuracao.php",
+		"/C/Users/usuario 2017/Desktop/Imobiliaria/pages/p.php",
+		"/C/Users/usuario 2017/Desktop/Imobiliaria/images/up/b0a01a24838f7bf4455a00def6a0bec3",
+		"/C/Users/usuario 2017/Desktop/testes/script.js",
+		"/C/Users/usuario 2017/Desktop/Imobiliaria/script.ts",
+		"/C/Users/usuario 2017/Desktop/Imobiliaria/style.scss",
+		"/C/Users/usuario 2017/Desktop/Imobiliaria/pages/adm.php",
+		"/C/Users/usuario 2017/Desktop/Imobiliaria/sftp-config.json",
+		"/C/Users/usuario 2017/AppData/Local/Temp/fz3temp-2/index.php",
+		"/C/Users/usuario 2017/AppData/Local/Temp/fz3temp-2/produto.php",
+		"/C/Users/usuario 2017/AppData/Local/Temp/fz3temp-2/inicio.php",
+		"/C/Users/usuario 2017/AppData/Local/Temp/fz3temp-2/configuracao.php",
+		"/C/Users/usuario 2017/Desktop/style.css"
+	],
+	"find":
+	{
+		"height": 73.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"scope",
+			"cdnjs",
+			".allproducts a",
+			".seemore a, .allproducts a",
+			"allproducts",
+			"float: right",
+			"shipping",
+			"features-section-head",
+			"features-section-head text-center",
+			"banner",
+			"Vendas",
+			"h4",
+			"img>",
+			"img",
+			"childs[proximo]",
+			"flexslider",
+			"Encontre casas e apartamentos em todo o Brasil",
+			"Brasil",
+			"mysql"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 35.0
+	},
+	"input":
+	{
+		"height": 68.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.doc":
+	{
+		"height": 0.0
+	},
+	"output.exec":
+	{
+		"height": 150.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.git-init":
+	{
+		"height": 162.0
+	},
+	"output.sftp":
+	{
+		"height": 174.0
+	},
+	"pinned_build_system": "",
+	"project": "socks.sublime-project",
+	"replace":
+	{
+		"height": 66.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 245.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

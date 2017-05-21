@@ -1,0 +1,14 @@
+{
+    "public/":{
+        "url_testing":"http://localhost/",
+        "url_production":"http://domain.tld/"
+    },
+    "experimental/":{
+        "url_testing":"http://experimental/",
+        "url_production":"http://domain.tld/"
+    },
+    "":{
+        "url_testing":"http://localhost/sockets/",
+        "url_production":"http://the_url_for_the_project_root/"
+    }
+}

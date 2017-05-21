@@ -1,0 +1,13 @@
+{
+    "name": "paulo/sockets",
+    "authors": [
+        {
+            "name": "Paulão Developer",
+            "email": "PaulaoDeveloper@users.noreply.github.com"
+        }
+    ],
+    "require": {
+    	"igorw/event-source": "1.0.*",
+    	"greg0/lazer-database": "1.0.*"
+    }
+}

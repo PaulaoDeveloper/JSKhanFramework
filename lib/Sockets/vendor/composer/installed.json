@@ -1,0 +1,94 @@
+[
+    {
+        "name": "igorw/event-source",
+        "version": "v1.0.0",
+        "version_normalized": "1.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/igorw/EventSource.git",
+            "reference": "753dad1f5b49058e87e2a76029d3c9cc9151fdf8"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/igorw/EventSource/zipball/753dad1f5b49058e87e2a76029d3c9cc9151fdf8",
+            "reference": "753dad1f5b49058e87e2a76029d3c9cc9151fdf8",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "time": "2012-07-14T00:02:15+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Igorw\\EventSource": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Igor Wiedler",
+                "email": "igor@wiedler.ch",
+                "homepage": "http://wiedler.ch/igor/"
+            }
+        ],
+        "description": "A PHP 5.3 library for creating an EventSource stream.",
+        "keywords": [
+            "event-source",
+            "real-time",
+            "server-sent-events"
+        ]
+    },
+    {
+        "name": "greg0/lazer-database",
+        "version": "1.0.14",
+        "version_normalized": "1.0.14.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Greg0/Lazer-Database.git",
+            "reference": "735f0e7adceceef269dec4cb7351c3397d557e9c"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Greg0/Lazer-Database/zipball/735f0e7adceceef269dec4cb7351c3397d557e9c",
+            "reference": "735f0e7adceceef269dec4cb7351c3397d557e9c",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.4"
+        },
+        "time": "2015-06-16T19:33:54+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Lazer\\Classes\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Grzegorz Kuźnik",
+                "email": "gerg0sz92@gmail.com"
+            }
+        ],
+        "description": "PHP library to use JSON files like flat-file database",
+        "homepage": "http://github.com/Greg0/Lazer-Database",
+        "keywords": [
+            "Simple",
+            "database",
+            "db",
+            "file",
+            "flat",
+            "json",
+            "lazer"
+        ]
+    }
+]
