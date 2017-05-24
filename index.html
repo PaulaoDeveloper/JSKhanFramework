@@ -45,6 +45,50 @@
 
     <script type="text/javascript" src="https://cdn.rawgit.com/PauloSergioRomaoJunior/JSKhanFramework/master/lib/Routes/route.js?version=1.0.1"></script>
     <script type="text/javascript" charset="utf-8" src="scripts/app.js"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script>
+
+    var OAUTH2_CLIENT_ID = 'AIzaSyCj4GozDftVu8QnP6zNZynrchNeYxE7M_Y';
+    var OAUTH2_SCOPES = ['https://www.googleapis.com/auth/youtube'];
+    // Upon loading, the Google APIs JS client automatically invokes this callback.
+    googleApiClientReady = function() {
+    gapi.auth.init(function() {
+        window.setTimeout(checkAuth, 1);
+    });
+    }
+
+    function checkAuth() {
+    gapi.auth.authorize({
+        client_id: OAUTH2_CLIENT_ID,
+        scope: OAUTH2_SCOPES,
+        immediate: true
+    }, handleAuthResult);
+    }
+
+// Handle the result of a gapi.auth.authorize() call.
+function handleAuthResult(authResult) {
+  if (authResult && !authResult.error) {
+    loadAPIClientInterfaces();
+  } else {
+      gapi.auth.authorize({
+        client_id: OAUTH2_CLIENT_ID,
+        scope: OAUTH2_SCOPES,
+        immediate: false
+        }, handleAuthResult);
+  }
+}
+
+function loadAPIClientInterfaces() {
+  gapi.client.load('youtube', 'v3', function() {
+    handleAPILoaded();
+  });
+}
+
+function handeAPILoaded(){
+    console.log("API CARREGADA!!");
+}
+
+    </script>
     <script type="text/javascript" charset="utf-8" async>
         
         // new Khan(' nome do khan-app ');
@@ -58,7 +102,7 @@
                 "Log": "Modules/log",
                 "Calculadora": "Modules/foo",
                 "Foo": "Modules/foo",
-                "Components": "Modules/Components"
+                "Components": "Modules/Component"
             }
         });
 
