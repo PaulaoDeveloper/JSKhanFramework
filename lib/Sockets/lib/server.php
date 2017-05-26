@@ -8,14 +8,16 @@
 
 	use Igorw\EventSource\Stream;
 	$stream = new Stream();
-	if(file_exists('../data/'.$_GET['canal'].'.json')){ 
-		$buffer = file_get_contents('../data/'.$_GET['canal'].'.json'); 
+    $baseUrl = '../../../views/sockets/data/';
+
+	if(file_exists($baseUrl.$_GET['canal'].'.json')){ 
+		$buffer = file_get_contents($baseUrl.$_GET['canal'].'.json'); 
 	}
 	$row = 0;
 
 	while (true) {
     	if(isset($_GET['canal']) && isset($buffer)){
-    		$newBuffer = file_get_contents('../data/'.$_GET['canal'].'.json');
+    		$newBuffer = file_get_contents($baseUrl.$_GET['canal'].'.json');
     		if($row == 0){
     			$stream->event()
                	   	   ->setData($buffer)

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>JSKhan FrameWork</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="assets/img/icon.png" />
     <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/PauloSergioRomaoJunior/JSKhanFramework/master/assets/css/fonte.css">
     <link rel="stylesheet" href="assets/css/bootstrap.css">
@@ -40,55 +41,12 @@
 <body>
 
     <template-khan>
-        <h1 onclick="{{helloWorldMsg}}">{{Msg_Boas_Vindas}}</h1>
+        <!-- <h1 onclick="{{helloWorldMsg}}">{{Msg_Boas_Vindas}}</h1> -->
     </template-khan>
-
+    
+    <script type='text/javascript' src="//wurfl.io/wurfl.js"></script>
     <script type="text/javascript" src="https://cdn.rawgit.com/PauloSergioRomaoJunior/JSKhanFramework/master/lib/Routes/route.js?version=1.0.1"></script>
     <script type="text/javascript" charset="utf-8" src="scripts/app.js"></script>
-    <script src="https://apis.google.com/js/api.js"></script>
-    <script>
-
-    var OAUTH2_CLIENT_ID = 'AIzaSyCj4GozDftVu8QnP6zNZynrchNeYxE7M_Y';
-    var OAUTH2_SCOPES = ['https://www.googleapis.com/auth/youtube'];
-    // Upon loading, the Google APIs JS client automatically invokes this callback.
-    googleApiClientReady = function() {
-    gapi.auth.init(function() {
-        window.setTimeout(checkAuth, 1);
-    });
-    }
-
-    function checkAuth() {
-    gapi.auth.authorize({
-        client_id: OAUTH2_CLIENT_ID,
-        scope: OAUTH2_SCOPES,
-        immediate: true
-    }, handleAuthResult);
-    }
-
-// Handle the result of a gapi.auth.authorize() call.
-function handleAuthResult(authResult) {
-  if (authResult && !authResult.error) {
-    loadAPIClientInterfaces();
-  } else {
-      gapi.auth.authorize({
-        client_id: OAUTH2_CLIENT_ID,
-        scope: OAUTH2_SCOPES,
-        immediate: false
-        }, handleAuthResult);
-  }
-}
-
-function loadAPIClientInterfaces() {
-  gapi.client.load('youtube', 'v3', function() {
-    handleAPILoaded();
-  });
-}
-
-function handeAPILoaded(){
-    console.log("API CARREGADA!!");
-}
-
-    </script>
     <script type="text/javascript" charset="utf-8" async>
         
         // new Khan(' nome do khan-app ');
@@ -102,11 +60,12 @@ function handeAPILoaded(){
                 "Log": "Modules/log",
                 "Calculadora": "Modules/foo",
                 "Foo": "Modules/foo",
-                "Components": "Modules/Component"
+                "Components": "Modules/Component",
+                "Sockets": "Sockets/lib/cloud.min"
             }
         });
 
-        App.Modules(["Components"], function() {
+        App.Modules(["Components","Sockets"], function() {
 
                 // ROUTE 1 INDEX
                 App.Controllers('homeController', function($scope){
@@ -152,6 +111,54 @@ function handeAPILoaded(){
                 // ROUTE 2
                 App.Router('/page/:id', ($request) => {
                     App.DomRender(`<h1> Pagina ${$request}</h1>`);
+                });
+
+                App.Controllers('socketsController', function($scope){
+
+                    function genId(){
+                        if(sessionStorage.getItem('id')){
+                            return sessionStorage.getItem('id');
+                        }else{
+                            sessionStorage.setItem('id', Math.floor(Math.random() * 100000));
+                            Post(PATH + "teste.php",{
+                                "Dispositivo": Dispositive,
+                                "id": sessionStorage.getItem('id')
+                            }, function(e){
+                                console.log(e);
+                            });
+                        }
+                    }
+
+                    const PATH = "views/sockets/",
+                          Dispositive = WURFL.form_factor,
+                          ID = genId(),
+                          CloudAws = new Cloud("api-youtube");
+                    window.DataReceive = {};
+
+                    App.PageRender(PATH + 'index.html', (c) => {
+                        App.DomRender(c);
+                    });
+                    App.PageRender(PATH + 'mobile.html', (c) => {
+                        App.DomRender(c);
+                    });
+
+                    CloudAws.event("connect", function(data){
+                        setTimeout(() => {
+                            $(".connect-input").value = sessionStorage.getItem('id');
+                        }, Math.floor(Math.random() * 10000));
+                    });
+
+                    CloudAws.event("on", function(data){
+                        var receive = JSON.parse(data);
+                        receive.map((v) => {
+                            var id = v.id;
+                            if(Object.values(DataReceive).indexOf(id) == -1) DataReceive[id] = v;
+                            if(Object.values(DataReceive).indexOf(id) != -1 && v.dispositivo != DataReceive[id].dispositivo){
+                                alert("Conectado !!!");
+                            }
+                        });
+                    });
+
                 });
 
         });

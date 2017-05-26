@@ -452,13 +452,8 @@ class Khan {
     /* FUNCOES EXTRAS Each e Memorize de Cache */
 
     Addons() {
-        window["$"] = (ob) => {
-            if (ob != 'document') {
-                return document.querySelector(ob);
-            } else {
-                return ob;
-            }
-        };
+        window["$"] = document.querySelector.bind(document);
+        window["log"] = console.log.bind(document);
         window["CacheModules"] = function(module) {
                 sessionStorage.removeItem(module);
                 document.location.reload();
@@ -817,7 +812,7 @@ class Khan {
 
     DomRender($code) {
             return (document.querySelectorAll(`template-khan`).length > 0) ? document.querySelector(`template-khan`).Code += $code : this.Log('Erro ! Não Existe a View "' + this.app + '"');
-        }
+    }
         /* FAZ O CACHE DO CODIGO RENDERIZADO*/
     CachePage(_page, call) {
 
@@ -839,7 +834,7 @@ class Khan {
         var $request = new XMLHttpRequest();
         $request.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                sessionStorage.setItem($page, window.btoa(this.responseText));
+                //sessionStorage.setItem($page, window.btoa(this.responseText));
                 $callback(this.responseText);
             }
         };
