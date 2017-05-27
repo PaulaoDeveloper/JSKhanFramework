@@ -63,6 +63,8 @@
 
     };
 
+    /* ARRAY INCLUDES */
+    Array.prototype.includes||Object.defineProperty(Array.prototype,"includes",{value:function(r,t){if(null==this)throw new TypeError('"this" is null or not defined');var e=Object(this),n=e.length>>>0;if(0===n)return!1;for(var i=0|t,o=Math.max(i>=0?i:n-Math.abs(i),0);n>o;){if(e[o]===r)return!0;o++}return!1}});
 
 }).apply(window);
 
@@ -834,7 +836,7 @@ class Khan {
         var $request = new XMLHttpRequest();
         $request.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                //sessionStorage.setItem($page, window.btoa(this.responseText));
+                sessionStorage.setItem($page, window.btoa(this.responseText));
                 $callback(this.responseText);
             }
         };

@@ -6,6 +6,5 @@
 
 	$db->insert(array(
 		"dispositivo" => $_POST['Dispositivo'],
-		"id" => $_POST['id'],
-		"date-create" => date("h-i-s")
+		"id" => $_POST['id']
 	));

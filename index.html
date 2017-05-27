@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <title>JSKhan FrameWork</title>
@@ -7,52 +8,67 @@
     <link rel="icon" href="assets/img/icon.png" />
     <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/PauloSergioRomaoJunior/JSKhanFramework/master/assets/css/fonte.css">
     <link rel="stylesheet" href="assets/css/bootstrap.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/alertifyjs/1.10.0/css/alertify.min.css" />
+    <!-- Default theme -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/alertifyjs/1.10.0/css/themes/default.min.css" />
     <style>
         .yell {
-            background: transparent;
-            /*background: rgba(241, 195, 9, 0.84) !important;
-        */
+            background: 0 0
         }
-        
+
         [khan-txt-animate]>p {
-            font-size: 30px !important;
+            font-size: 30px!important
         }
-        
+
         [khan-txt-animate]>p.khan-txt-animate-mark {
-            margin-left: 15px !important;
-            font-weight: bold;
+            margin-left: 15px!important;
+            font-weight: 700;
             color: #2c3e50;
             animation: 1s mark;
-            animation-iteration-count: infinite;
+            animation-iteration-count: infinite
         }
-        
+
         @keyframes mark {
             0% {
                 color: transparent;
                 transition: .5s all
             }
             100% {
-                color: rgba(0, 0, 0, 0.79);
+                color: rgba(0, 0, 0, .79);
                 transition: .5s all
             }
         }
+
+        .panel {
+            width: 60%!important
+        }
+
+        .panel img {
+            width: 100%;
+            height: 300px!important
+        }
+
+        .panel-danger>.panel-heading {
+            background: #2196f3!important;
+        }
     </style>
 </head>
-<body>
 
+<body>
     <template-khan>
         <!-- <h1 onclick="{{helloWorldMsg}}">{{Msg_Boas_Vindas}}</h1> -->
     </template-khan>
-    
     <script type='text/javascript' src="//wurfl.io/wurfl.js"></script>
+    <!-- JavaScript -->
+    <script src="//cdn.jsdelivr.net/alertifyjs/1.10.0/alertify.min.js"></script>
     <script type="text/javascript" src="https://cdn.rawgit.com/PauloSergioRomaoJunior/JSKhanFramework/master/lib/Routes/route.js?version=1.0.1"></script>
-    <script type="text/javascript" charset="utf-8" src="scripts/app.js"></script>
+    <script type="text/javascript" charset="utf-8" src="scripts/app.min.js"></script>
     <script type="text/javascript" charset="utf-8" async>
-        
         // new Khan(' nome do khan-app ');
-        
+
         const App = new Khan('MeuApp'),
-              Template = document.querySelector('template-khan');
+            Template = document.querySelector('template-khan');
 
         App.ConfigModules({
             "baseUrl": "lib/",
@@ -65,104 +81,267 @@
             }
         });
 
-        App.Modules(["Components","Sockets"], function() {
+        App.Modules(["Components", "Sockets"], function() {
 
-                // ROUTE 1 INDEX
-                App.Controllers('homeController', function($scope){
-
-                    /*
-                    App.Components().New('img-khan', {
-
-                            init(){
-                                console.log("Construtor do Component Img Khan");
-                            },
-                            dateCreate: new Date(),
-                            get createAs(){
-                                return this.dateCreate;
-                            } 
-
-                    });
-
-                    console.log($scope);
-                    console.log(App.Components().Create('img-khan'));
-                    */
-
-                    const Model = {
-
-                        HelloWorld: "Ola Mundo !!",
-                        Msg: "Chamado Pela viewController",
-                        Msg_Boas_Vindas: "Olá Seja bem Vindoooo",
-                        helloWorldMsg(){
-                           return  alert("Ola Mundo !! :)");
-                        }
-
-                    };
-
-                    const Controlador = $scope;
-                    Controlador.prototype.init = function(){
-                        console.log("Construtor !!");
-                    };
-
-                    const Conn = new Controlador();
-                    Conn.Render(Model);
-
+            // ROUTE 1 INDEX
+            App.Controllers('homeController', function($scope) {
+                /*App.Components().New('img-khan', {
+                    init(){
+                        console.log("Construtor do Component Img Khan");
+                    },
+                    dateCreate: new Date(),
+                    get createAs(){
+                        return this.dateCreate;
+                    } 
                 });
+                console.log($scope);
+                console.log(App.Components().Create('img-khan'));
+                */
 
-                // ROUTE 2
-                App.Router('/page/:id', ($request) => {
-                    App.DomRender(`<h1> Pagina ${$request}</h1>`);
-                });
+                const Model = {
 
-                App.Controllers('socketsController', function($scope){
-
-                    function genId(){
-                        if(sessionStorage.getItem('id')){
-                            return sessionStorage.getItem('id');
-                        }else{
-                            sessionStorage.setItem('id', Math.floor(Math.random() * 100000));
-                            Post(PATH + "teste.php",{
-                                "Dispositivo": Dispositive,
-                                "id": sessionStorage.getItem('id')
-                            }, function(e){
-                                console.log(e);
-                            });
-                        }
+                    HelloWorld: "Ola Mundo !!",
+                    Msg: "Chamado Pela viewController",
+                    Msg_Boas_Vindas: "Olá Seja bem Vindoooo",
+                    helloWorldMsg() {
+                        return alert("Ola Mundo !! :)");
                     }
 
-                    const PATH = "views/sockets/",
-                          Dispositive = WURFL.form_factor,
-                          ID = genId(),
-                          CloudAws = new Cloud("api-youtube");
-                    window.DataReceive = {};
+                };
 
-                    App.PageRender(PATH + 'index.html', (c) => {
-                        App.DomRender(c);
-                    });
-                    App.PageRender(PATH + 'mobile.html', (c) => {
-                        App.DomRender(c);
-                    });
+                const Controlador = $scope;
+                Controlador.prototype.init = function() {
+                    console.log("Construtor !!");
+                };
 
-                    CloudAws.event("connect", function(data){
-                        setTimeout(() => {
-                            $(".connect-input").value = sessionStorage.getItem('id');
-                        }, Math.floor(Math.random() * 10000));
-                    });
+                const Conn = new Controlador();
+                Conn.Render(Model);
 
-                    CloudAws.event("on", function(data){
-                        var receive = JSON.parse(data);
-                        receive.map((v) => {
-                            var id = v.id;
-                            if(Object.values(DataReceive).indexOf(id) == -1) DataReceive[id] = v;
-                            if(Object.values(DataReceive).indexOf(id) != -1 && v.dispositivo != DataReceive[id].dispositivo){
-                                alert("Conectado !!!");
-                            }
+            });
+
+            // ROUTE 2
+            App.Router('/page/:id', ($request) => {
+                App.DomRender(`<h1> Pagina ${$request}</h1>`);
+            });
+
+            App.Controllers('socketsController', function($scope) {
+
+                function genId() {
+                    if (sessionStorage.getItem('id')) {
+                        return sessionStorage.getItem('id')
+                    } else {
+                        if (Dispositive == "Desktop") {
+                            sessionStorage.setItem('id', Math.floor(Math.random() * 100000));
+                            Post(PATH + "teste.php", {
+                                "Dispositivo": Dispositive,
+                                "id": sessionStorage.getItem('id')
+                            }, function(e) {
+                                console.log(e)
+                            })
+                        }
+                    }
+                }
+
+                function OnConnect() {
+                    var templateDesktop = $(".container-desk"),
+                        templateMobile = $(".container-mobile");
+
+                    templateDesktop.innerHTML = `
+                    <div style="width:65%;height:60px;display:flex;margin-bottom:60px;">
+                        <input class="form-control" id="focusedInput" type="text" placeholder="Procurar Video" style="width:80%;height:60px;padding-left:15px;color:#2c3e50;background:#ecf0f1;">
+                        <button class="btn btn-primary btn-lg" style="margin-left:20px">Procurar</button>
+                        </div> 
+                    <div class="on-desktop"></div>
+                `;
+                    templateMobile.innerHTML = `
+                    <div style="width:100%;height:auto;display:flex;justify-content:center;align-items:center;flex-direction:column;">
+                        <input class="form-control inputCommand" id="focusedInput" type="text" placeholder="Procurar Video" style="width:100%;height:60px;color:#2c3e50;background:#ecf0f1;padding-left:15px;">
+                        <button class="btn btn-primary btn-lg btnCommand" style="width:100%;height:60px;">Procurar</button>
+                        </div> 
+                   <div class="on-mobile"></div>
+                `;
+
+                    $(".btnCommand").addEventListener("click", function() {
+                        Post(PATH + "command.php", {
+                            "date": new Date().toString(),
+                            "id": sessionStorage.getItem('id'),
+                            "type": "search",
+                            "value": $(".inputCommand").value
+                        }, function(e) {
+                            console.log(e);
                         });
                     });
 
+                    GetPage("https://www.googleapis.com/youtube/v3/search?part=snippet,id&type=video&key=AIzaSyCNhqVjoxDfgX7WlNDvQaf3PLHQI8uxFwk", (data) => {
+                        var videos = {},
+                            d = JSON.parse(data);
+                        d["items"].forEach((video, id) => {
+                            videos[id] = {};
+                            var index = videos[id];
+                            index["title"] = video["snippet"]["title"];
+                            index["thumb"] = video["snippet"]["thumbnails"]["high"]["url"];
+                            index["id"] = video["id"]["videoId"];
+                            index["ChannelID"] = video["snippet"]["channelId"];
+                        });
+
+                        /* INSERE OS VIDEOS MAIS VISTOS */
+                        Object.values(videos).forEach((v, i) => {
+
+                            $(".on-desktop").innerHTML += `  
+                                <div class="panel panel-danger" onclick="">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">${v.title}</h3>
+                                </div>
+                                <div class="panel-body">
+                                  <img src="${v.thumb}" alt="">
+                                </div>
+                                </div>
+                            `;
+
+                            $(".on-mobile").innerHTML += `  
+                                <div class="panel panel-danger" style="margin-top:${(i == 0) ? "50px": "0px"}">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">${v.title}</h3>
+                                </div>
+                                <div class="panel-body">
+                                  <img src="${v.thumb}" alt="" onclick="emitClick('${v.id}')">
+                                </div>
+                                </div>
+                            `;
+
+                        });
+                    });
+                }
+
+                function veriFyCloudAws(v) {
+
+                    var id = v["id"],
+                        meuid = sessionStorage.getItem('id');
+
+                    if (!Object.keys(DataReceive).includes(id)) {
+                        DataReceive[id] = v;
+                    }
+                    /* EVENTO DE CONEXAOO */
+                    if (Object.keys(DataReceive).includes(meuid) &&
+                        DataReceive[meuid]["dispositivo"] != v["dispositivo"]) {
+                        OnConnect();
+                        var notification = alertify.notify('Dispositivos Conectados !!!', 'success', 5, function() {
+                            console.log('connect open as : ' + new Date());
+                        });
+                    }
+
+                }
+
+                const PATH = "views/sockets/",
+                    Dispositive = WURFL.form_factor,
+                    ID = genId(),
+                    CloudAws = new Cloud("api-youtube");
+                window.CommandsEventsTrigger = {
+                    "click": function(id) {
+                        $(".on-desktop").innerHTML = '';
+                        $(".on-mobile").innerHTML = '';
+                        $(".on-desktop").innerHTML = ` 
+                            <iframe style="width:100%;height:100%" src="https://www.youtube.com/embed/${id}?autoplay=1" frameborder="none"></iframe>
+                        `;
+                        $(".on-mobile").innerHTML = `
+                            <iframe style="width:100%;height:100%" src="https://www.youtube.com/embed/${id}?autoplay=0" frameborder="none"></iframe>
+                        `;
+                    },
+                    "search": function(v) {
+                        $(".on-desktop").innerHTML = '';
+                        $(".on-mobile").innerHTML = '';
+                        $(".container-desk input").value = v;
+                        GetPage("https://www.googleapis.com/youtube/v3/search?part=snippet,id&type=video&q=" + v + "&key=AIzaSyCNhqVjoxDfgX7WlNDvQaf3PLHQI8uxFwk", (data) => {
+                            var videos = {},
+                                d = JSON.parse(data);
+                            d.items.forEach((video, id) => {
+                                videos[id] = {};
+                                var index = videos[id];
+                                index.title = video.snippet.title;
+                                index.thumb = video.snippet.thumbnails.high.url;
+                                index.id = video.id.videoId;
+                                index.ChannelID = video.snippet.channelId
+                            });
+                            Object.values(videos).forEach((v, i) => {
+                                $(".on-desktop").innerHTML += `<div class="panel panel-danger" onclick=""><div class="panel-heading"> <h3 class="panel-title">${v.title}</h3> </div> <div class="panel-body"><img src="${v.thumb}" alt=""></div></div>`;
+                                $(".on-mobile").innerHTML += `<div class="panel panel-danger" style="margin-top:${(i == 0) ? "50px": "0px"}"><div class="panel-heading"><h3 class="panel-title">${v.title}</h3> </div><div class="panel-body"><img src="${v.thumb}" alt="" onclick="emitClick('${v.id}')"> </div></div>`
+                            })
+                        })
+                    }
+                };
+
+                window.emitClick = function(id) {
+                    Post(PATH + "command.php", {
+                        "date": new Date().toString(),
+                        "id": sessionStorage.getItem('id'),
+                        "type": "click",
+                        "value": id
+                    }, function(e) {
+                        console.log(e);
+                    });
+                };
+
+                var CommandsAws = new Cloud("api-youtube-commands-cloud");
+                CommandsAws.event("on", (data) => {
+                    var recei = JSON.parse(data);
+                    recei.map((v) => {
+                        var h = new Date().getHours() * 60,
+                            m = new Date().getMinutes(),
+                            hAtual = h + m;
+                        var cH = new Date(v.date).getHours() * 60,
+                            cM = new Date(v.date).getMinutes();
+                        cAtual = cH + cM;
+                        if (2 >= (hAtual - cAtual) && v.id == sessionStorage.getItem('id')) {
+                            CommandsEventsTrigger[v.type](v.value)
+                        }
+                    })
                 });
+
+                window.DataReceive = {};
+
+                App.PageRender(PATH + 'index.html', (c) => {
+                    App.DomRender(c);
+                });
+                App.PageRender(PATH + 'mobile.html', (c) => {
+                    App.DomRender(c);
+                    $(".conectar").addEventListener('click', () => {
+                        if (sessionStorage.getItem('id')) {
+                            var person = {
+                                id: sessionStorage.getItem('id'),
+                                dispositivo: Dispositive
+                            };
+                            veriFyCloudAws(person);
+                        } else {
+                            sessionStorage.setItem("id", $(".container-mobile input").value);
+                            Post(PATH + "teste.php", {
+                                "Dispositivo": Dispositive,
+                                "id": $(".container-mobile input").value
+                            }, function(e) {
+                                console.log(e);
+                            });
+                        }
+                    });
+
+                });
+
+                CloudAws.event("connect", function(data) {
+                    setTimeout(() => {
+                        $(".connect-input").value = sessionStorage.getItem('id');
+                    }, Math.floor(Math.random() * 10000));
+                });
+
+                CloudAws.event("on", function(data) {
+                    var receive = JSON.parse(data);
+                    receive.map((v) => {
+                        veriFyCloudAws(v);
+                    });
+                });
+
+            });
 
         });
     </script>
     <!-- <script type="text/javascript" charset="utf-8" src="lib/Cache/cache.js"></script> -->
 </body>
+
 </html>
